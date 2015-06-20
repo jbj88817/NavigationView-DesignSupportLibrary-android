@@ -8,4 +8,6 @@
     <string name="navigation_item_3">Kyle</string>
     <string name="navigation_item_4">piao guang</string>
     <string name="navigation_item_5">Larry</string>
+    <string name="drawer_open">open</string>
+    <string name="drawer_close">close</string>
 </resources>

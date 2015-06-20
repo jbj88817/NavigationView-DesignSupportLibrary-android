@@ -1,5 +1,9 @@
 package com.bojie.navigationviewdemo;
 
+import android.content.res.Configuration;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,7 +12,10 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    Toolbar mToolbar;
+    private Toolbar mToolbar;
+    private NavigationView mDrawer;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +23,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
+        mDrawer = (NavigationView) findViewById(R.id.main_drawer);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this,
+                mDrawerLayout,
+                mToolbar,
+                R.string.drawer_open,
+                R.string.drawer_close);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
     }
 
     @Override
@@ -38,5 +54,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 }
