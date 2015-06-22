@@ -1,16 +1,18 @@
 package com.bojie.navigationviewdemo;
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private Toolbar mToolbar;
     private NavigationView mDrawer;
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
                 R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
+
+        mDrawer.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -60,5 +64,26 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        Intent intent = null;
+        int id = menuItem.getItemId();
+
+        if (id == R.id.navigation_item_2){
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            intent = new Intent(this, SecondActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.navigation_item_3) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            intent = new Intent(this, ThirdActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return false;
     }
 }
