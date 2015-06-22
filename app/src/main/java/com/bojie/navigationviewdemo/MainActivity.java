@@ -12,12 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String SELECTED_ITEM_ID = "selected_item_id";
     private Toolbar mToolbar;
     private NavigationView mDrawer;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
+    private int mSelectedId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
         mDrawer = (NavigationView) findViewById(R.id.main_drawer);
+        mDrawer.setNavigationItemSelectedListener(this);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
@@ -35,7 +38,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.syncState();
 
-        mDrawer.setNavigationItemSelectedListener(this);
+        mSelectedId = savedInstanceState ==
+                null ? R.id.navigation_item_1 : savedInstanceState.getInt(SELECTED_ITEM_ID);
+
+        navigate(mSelectedId);
+
+    }
+
+    private void navigate(int selectedId) {
+        Intent intent = null;
+
+        if (selectedId == R.id.navigation_item_2) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            intent = new Intent(this, SecondActivity.class);
+            startActivity(intent);
+        }
+
+        if (selectedId == R.id.navigation_item_3) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+            intent = new Intent(this, ThirdActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -68,22 +91,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(MenuItem menuItem) {
-        Intent intent = null;
-        int id = menuItem.getItemId();
 
-        if (id == R.id.navigation_item_2){
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            intent = new Intent(this, SecondActivity.class);
-            startActivity(intent);
-            return true;
-        }
+        menuItem.setChecked(true);
+        mSelectedId = menuItem.getItemId();
 
-        if (id == R.id.navigation_item_3) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
-            intent = new Intent(this, ThirdActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        return false;
+        navigate(mSelectedId);
+
+        return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SELECTED_ITEM_ID, mSelectedId);
     }
 }
