@@ -1,8 +1,10 @@
 package com.bojie.navigationviewdemo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,11 +17,13 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String SELECTED_ITEM_ID = "selected_item_id";
+    private static final String FIRST_TIME = "first_time";
     private Toolbar mToolbar;
     private NavigationView mDrawer;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
     private int mSelectedId;
+    private boolean mUserSawDrawer = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +44,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mSelectedId = savedInstanceState ==
                 null ? R.id.navigation_item_1 : savedInstanceState.getInt(SELECTED_ITEM_ID);
-
         navigate(mSelectedId);
+
+        if (!didUserSeeDrawer()) {
+            showDrawer();
+            markDrawerSeen();
+        } else {
+            hideDrawer();
+        }
 
     }
 
@@ -49,13 +59,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = null;
 
         if (selectedId == R.id.navigation_item_2) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+            hideDrawer();
             intent = new Intent(this, SecondActivity.class);
             startActivity(intent);
         }
 
         if (selectedId == R.id.navigation_item_3) {
-            mDrawerLayout.closeDrawer(GravityCompat.START);
+            hideDrawer();
             intent = new Intent(this, ThirdActivity.class);
             startActivity(intent);
         }
@@ -104,5 +114,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(SELECTED_ITEM_ID, mSelectedId);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            hideDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    private boolean didUserSeeDrawer() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mUserSawDrawer = preferences.getBoolean(FIRST_TIME, false);
+        return mUserSawDrawer;
+    }
+
+    private void showDrawer() {
+        mDrawerLayout.openDrawer(GravityCompat.START);
+    }
+
+    private void hideDrawer() {
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    private void markDrawerSeen() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mUserSawDrawer = true;
+        preferences.edit().putBoolean(FIRST_TIME, mUserSawDrawer).apply();
+
     }
 }
