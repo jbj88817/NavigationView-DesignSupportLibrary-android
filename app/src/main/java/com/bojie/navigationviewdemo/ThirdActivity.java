@@ -29,12 +29,17 @@ public class ThirdActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
+        mAdapter = new MyPagerAdapter(getSupportFragmentManager());
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
         mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mPager = (ViewPager) findViewById(R.id.pager);
-        mAdapter = new MyPagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mAdapter);
+        mTabLayout.setTabsFromPagerAdapter(mAdapter);
+
+        // Add listener
+        mTabLayout.setupWithViewPager(mPager);
+        mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
     }
 
     @Override
@@ -61,15 +66,27 @@ public class ThirdActivity extends AppCompatActivity {
     }
 
     public static class MyFragment extends Fragment {
-        public  MyFragment() {
+        private static final java.lang.String ARG_PAGE = "arg_page";
 
+        public MyFragment() {
+
+        }
+
+        public static MyFragment newInstance(int pageNumber) {
+            MyFragment myFragment = new MyFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_PAGE, pageNumber);
+            myFragment.setArguments(args);
+            return myFragment;
         }
 
         @Nullable
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            Bundle arguments = getArguments();
+            int pageNumber = arguments.getInt(ARG_PAGE);
             TextView myText = new TextView(getActivity());
-            myText.setText("Hello text here in the Fragment");
+            myText.setText("Hello text here in the Fragment " + pageNumber);
             myText.setGravity(Gravity.CENTER);
             return myText;
         }
@@ -78,13 +95,13 @@ public class ThirdActivity extends AppCompatActivity {
 
 class MyPagerAdapter extends FragmentStatePagerAdapter {
 
-    public MyPagerAdapter(FragmentManager fm){
+    public MyPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
     @Override
     public Fragment getItem(int position) {
-        ThirdActivity.MyFragment myFragment = new ThirdActivity.MyFragment();
+        ThirdActivity.MyFragment myFragment = new ThirdActivity.MyFragment().newInstance(position);
         return myFragment;
     }
 
@@ -95,6 +112,6 @@ class MyPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return super.getPageTitle(position);
+        return "Tab " + position;
     }
 }
