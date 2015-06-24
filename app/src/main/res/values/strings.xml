@@ -12,4 +12,6 @@
     <string name="drawer_close">close</string>
     <string name="title_activity_second">SecondActivity</string>
     <string name="title_activity_third">ThirdActivity</string>
+    <string name="btn_submit">Submit</string>
+    <string name="text_dismiss">DISMISS</string>
 </resources>
