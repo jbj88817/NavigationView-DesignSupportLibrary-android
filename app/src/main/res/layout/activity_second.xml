@@ -2,6 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/root_activity_second"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
@@ -47,5 +48,19 @@
         android:background="@color/primary_light"
         android:text="@string/btn_submit"
         android:onClick="submit"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fab"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_add_black"
+        app:borderWidth="2dp"
+        app:fabSize="normal"
+        app:rippleColor="@color/primary_dark"
+        />
+
+
 
 </RelativeLayout>

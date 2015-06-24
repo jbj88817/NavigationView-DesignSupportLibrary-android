@@ -1,6 +1,7 @@
 package com.bojie.navigationviewdemo;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ public class SecondActivity extends AppCompatActivity {
     private TextInputLayout mInputLayout;
     private TextInputLayout mPasswordLayout;
     private EditText mInputEmail, mInputPassword;
+    private FloatingActionButton mFAB;
     private View.OnClickListener mSnackBarClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -23,6 +25,12 @@ public class SecondActivity extends AppCompatActivity {
         }
     };
 
+    private View.OnClickListener mFabClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Snackbar.make(mRoot, "FAB clicked", Snackbar.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +41,8 @@ public class SecondActivity extends AppCompatActivity {
         mRoot = (RelativeLayout) findViewById(R.id.root_activity_second);
         mInputEmail = (EditText) findViewById(R.id.input_email);
         mInputPassword = (EditText) findViewById(R.id.input_password);
+        mFAB = (FloatingActionButton) findViewById(R.id.fab);
+        mFAB.setOnClickListener(mFabClickListener);
     }
 
     @Override
